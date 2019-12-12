@@ -56,7 +56,18 @@ public class ClientHandler {
                             break;
                         }
 //                        System.out.println(str);
-                        server.broadcastMsg(nick + " : " + str);
+                        if (str.startsWith("/w ")) {
+
+                            String[] token = str.split(" ", 3);
+
+                            if (token[1] != null){
+                               server.privateMsg(token[2], token[1]);
+                            }
+
+
+                        }
+                        else
+                            server.broadcastMsg(nick + " : " + str);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -82,5 +93,9 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getNick() {
+        return this.nick;
     }
 }
