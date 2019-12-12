@@ -14,6 +14,17 @@ public class Server {
         return authService;
     }
 
+    public ClientHandler getClients(String name) {
+
+        for (ClientHandler c:clients ) {
+            if (c.getNick() == name){
+                return c;
+            }
+
+        }
+        return null;
+    }
+
     public Server() {
         clients = new Vector<>();
         authService = new SimpleAuthService();
@@ -21,7 +32,7 @@ public class Server {
         Socket socket = null;
 
         try {
-            server = new ServerSocket(8187);
+            server = new ServerSocket(8186);
             System.out.println("Сервер запущен");
 
             while (true){
@@ -46,6 +57,15 @@ public class Server {
         for (ClientHandler c:clients ) {
             c.sendMsg(msg);
         }
+    }
+
+    public void privateMsg(String msg, String nick){
+
+        for (ClientHandler c:clients ) {
+            if (c.getNick().equals(nick))
+                c.sendMsg(msg);
+        }
+
     }
 
     public void subscribe(ClientHandler clientHandler){

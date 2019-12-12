@@ -37,7 +37,7 @@ public class Controller implements Initializable {
     DataOutputStream out;
 
     final String IP_ADRESS = "localhost";
-    final int PORT = 8187;
+    final int PORT = 8186;
 
     private boolean isAuthenticated;
     private String nickname;
