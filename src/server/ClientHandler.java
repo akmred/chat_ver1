@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler {
     private Server server;
@@ -27,7 +28,24 @@ public class ClientHandler {
             this.server = server;
             this.socket = socket;
 
-//            socket.setSoTimeout(8000);
+            System.out.printf("running socket");
+
+            // сокет таймаут
+            new Thread(() -> {
+                try {
+
+                    socket.setSoTimeout(10);
+
+                } catch (SocketException k ) {
+                    k.printStackTrace();
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.printf("soket avto close");
+                }
+            }).start();
 
             System.out.println("RemoteSocketAddress: " + socket.getRemoteSocketAddress());
 
@@ -45,6 +63,7 @@ public class ClientHandler {
                                     .registration(token[1],token[2],token[3]);
                             if(!b){
                                 sendMsg("Ошибка: с этим логином уже Зарегистированы.");
+                                socket.setSoTimeout(0);
                             } else {
                                 sendMsg("Регистрация прошла успешно.");
                             }
@@ -61,6 +80,7 @@ public class ClientHandler {
                                     nick = newNick;
                                     server.subscribe(this);
                                     System.out.println("Клиент " + nick + " подключился");
+                                    socket.setSoTimeout(0);
                                     break;
                                 }else {
                                     sendMsg("С этим логином уже авторизовались");
