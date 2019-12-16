@@ -22,7 +22,6 @@ public class SimpleAuthService implements AuthService {
         this.users = new ArrayList<>();
         for (int i = 1; i <= 10; i++) {
             users.add(new UserData("login" + i, "pass" + i, "nick" + i));
-            System.out.printf("login" + i + "pass" + i + "nick" + i + "\n");
         }
     }
 
@@ -34,5 +33,17 @@ public class SimpleAuthService implements AuthService {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean registration(String login, String password, String nickname) {
+        for (UserData o:users ) {
+            if(o.login.equals(login)){
+                return false;
+            }
+        }
+
+        users.add(new UserData(login, password, nickname));
+        return true;
     }
 }
